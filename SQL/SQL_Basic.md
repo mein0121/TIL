@@ -25,7 +25,7 @@
 
 ### DDL(Data Definition Language)
 - Create 
-```
+```SQL
 사용자 계정 생성
 CREATE USER username IDENTIFIED BY Password;
 테이블 생성
@@ -43,7 +43,7 @@ CREATE TABLE member(
 	);
 ```
 - DROP
-```
+```SQL
 사용자 계정 삭제
 DROP USER username CASCADE;
 테이블 삭제
@@ -51,7 +51,7 @@ DROP TABLE TableName CASCADE CONSTRAINTS;
 ```
 - ALTER
 	- 컬럼 및 제약조건 추가 
-```
+```SQL
 Add Column
 ALTER TABLE TableName ADD (ColumnName dataType Constraints)
 
@@ -64,29 +64,32 @@ ALTER TABLE TableName MODIFY (ColumnName dataType Constraints)
 
 ### DML(Data Manipulation Language)
 - INSERT (데이터 삽입)
-	```
+	```SQL
 	INSERT INTO TableName (ColumnName1, ColumnName2,...) VALUES(VALUE1, VALUE2,...);
 	ex) INSERT INTO member(id, password, name, point, join_date) VALUES ('id-1','abcde','Hong',10000,'2020/01/26');
 	```
 	- Nullable한 속성값은 생략가능. 모든 컬럼에 값을 다 넣을 경우 컬럼명은 생략 가능.	
 - UPDATE
-	```
+	```SQL
 	UPDATE 테이블이름
 	SET 컬럼=변경할값 [, 컬럼=변경할값]
 	[WHERE 제약조건]
 	```
 - DELETE
-	```
+	```SQL
 	DELETE FROM 테이블이름 [WHERE 제약조건]
 	```
 - SELECT
-	```
+	```SQL
 	SELECT 조회컬럼 [as 별칭][, 조회컬럼,...]
 	FROM 테이블이름 [as 별칭]
 	[WHERE 제약조건]
 	[GROUP BY 그룹화할 기준컬럼]
 	[HAVING 조건]
 	[ORDER BY 정렬기준컬럼 [ASC | DESC]]
+	
+	DISTINCT
+	select [distinct]컬럼명1, 컬럼명2 => 중복된 조회결과는 하나만 보여준다.
 	```
 	- FROM
 		- dual: 더미(dummy) 테이블 - select의 from절을 만들기 위해서 사용하는 가짜 테이블
