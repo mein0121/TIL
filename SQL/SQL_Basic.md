@@ -17,11 +17,11 @@
 	- 테이블이 관리하는 하나의 데이터셋.
 
 ### SQL
-– DML(Data Manipulation Language) – INSERT, UPDATE, DELETE, SELECT
+- DML(Data Manipulation Language) – INSERT, UPDATE, DELETE, SELECT
 	- Manipulate data in a table
-– DDL(Data Definition Language) – CREATE, ALTER, DROP, TRUNCATE
-– DCL(Data Control Language) – GRANT, REVOKE # 권한 부여 및 취소.
-– TCL(Transaction Control Language) – COMMIT, ROLLBACK, SAVEPOINT
+- DDL(Data Definition Language) – CREATE, ALTER, DROP, TRUNCATE
+- DCL(Data Control Language) – GRANT, REVOKE # 권한 부여 및 취소.
+- TCL(Transaction Control Language) – COMMIT, ROLLBACK, SAVEPOINT
 
 ### DDL(Data Definition Language)
 - Create 
@@ -108,12 +108,12 @@ ALTER TABLE TableName MODIFY (ColumnName dataType Constraints)
 	
 	IS NULL: NULL값을 가진 데이터를 조회
 	IS NOT NULL: NULL값을 갖지 않는 데이터를 조회
-	*** 연산의 우선순위를 바꿀 경우 ( ) 를 사용한다.
+	연산의 우선순위를 바꿀 경우 ( ) 를 사용한다.
 	```
 - 산술연산 : + - * /
 	- 피연산자 중 null이 있으면 결과는 무조건 null. null + 10 = null
 	- null: 값이 없다. 또는 모르는 값이다.
-    - ***data타입값 +/-정수: day(일)을 +/-. 오늘날짜 +/-5: 5일후/전 날짜
+    - data타입값 +/-정수: day(일)을 +/-. 오늘날짜 +/-5: 5일후/전 날짜
 - 연결연산자 : 문자열을 붙이는 연산자. || => 모든타입 가능.
 
 
