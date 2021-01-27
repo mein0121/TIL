@@ -91,7 +91,7 @@ ALTER TABLE TableName MODIFY (ColumnName dataType Constraints)
 	- FROM
 		- dual: 더미(dummy) 테이블 - select의 from절을 만들기 위해서 사용하는 가짜 테이블
 	- WHERE
-	```
+	```SQL
 	사용하는 검색 조건의 주요 연산자: 
 	AND, OR
 	
@@ -99,15 +99,28 @@ ALTER TABLE TableName MODIFY (ColumnName dataType Constraints)
 	
 	BETWEEN a AND b:  a와b사이의 데이터를 조회(a, b값 포함)
 	NOT BETWEEN a AND b: a와b사이에 있지 않은 데이터를 조회
+	ex)
+	where salary [not] between 5000 and 10000
 	
 	LIKE: 문자 형태로 일치하는 데이터를 조회 (%, _사용)
 	NOT LIKE 문자 형태와 일치하지 않는 데이터를 조회
+	ex) 
+	where emp_name LIKE 'S%'; # emp_name중 'S'로 시작하는 데이터 
+	where emp_name LIKE '%S'; # emp_name중 'S'로 끝나는 데이터
+	where emp_name LIKE '__e%'; # emp_name중 세번째 글자가'e'로 시작하는 데이터
+	#_글자수 구분. 이경우 언더바 두개는 두글자를 의미.
+	where emp_name LIKE '%#%%' ESCAPE '#'; # emp_name에 '%'가 포함된 데이터
+	# 중간에 '%'를 포함하는 데이터, ESCAPE로 구분자 설정, 이경우 '#'은 개인이 조정가능.
 	
 	IN (list): list의 값 중 어느 하나와 일치하는 데이터를 조회
 	NOT IN (list): list의 값과 일치하지 않는 데이터를 조회
+	ex)
+	where emp_id [not] in (emp_id1,emp_id2,...); # 조건이 두개이상일경우 "," 사용
 	
 	IS NULL: NULL값을 가진 데이터를 조회
 	IS NOT NULL: NULL값을 갖지 않는 데이터를 조회
+	ex)
+	where mgr_id is [not] null;
 	연산의 우선순위를 바꿀 경우 ( ) 를 사용한다.
 	```
 - 산술연산 : + - * /
