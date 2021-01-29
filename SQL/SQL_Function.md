@@ -29,8 +29,8 @@ SELECT TO_CHAR(TO_DATE('20100107232215','YYYYMMDDHH24MISS'), 'YYYY"년" MM"월" 
 FROM DUAL;
 ```
 ### Functions
-```SQL
-함수 - 문자열관련 함수
+- 함수 - 문자열관련 함수
+```
 	UPPER()/ LOWER() : 대문자/소문자 로 변환
 	INITCAP(): 단어 첫글자만 대문자 나머진 소문자로 변환
 	LENGTH() : 글자수 조회
@@ -41,8 +41,9 @@ FROM DUAL;
 	LTRIM(값): 왼공백 제거
 	RTRIM(값): 오른공백 제거
 	TRIM(값): 양쪽 공백 제거
- 
-함수 - 숫자관련 함수
+``` 
+- 함수 - 숫자관련 함수
+```
 	round(값, 자릿수) : 자릿수이하에서 반올림 (양수 - 실수부, 음수 - 정수부, 기본값 : 0)
 	select round(1.2345,3), -- 결과: 1.235
 	round(1.52345,0), -- 결과: 2
@@ -61,8 +62,9 @@ FROM DUAL;
 	floor(15.67), -- 결과: 15
 	mod(10,3) -- 결과: 1
 	from dual;
- 
-함수 - 날짜관련 계산 및 함수
+``` 
+- 함수 - 날짜관련 계산 및 함수
+```
 	sysdate: 실행시점의 일시
 	Date +- 정수 : 날짜 계산.
 	months_between(d1, d2) -경과한 개월수(d1이 최근, d2가 과거)
@@ -85,6 +87,7 @@ from dual;
 
 select emp_id, emp_name, salary, 
 nvl(comm_pct,0) as comm_pct, --comm_pct가 null이면 0을 반환.
+
 -- comm_pct가 null이 아니면 두번째 조건문 반환, null이면 세번째 반환.
 nvl2(comm_pct, '커미션있음','커미션없음') as comm_pct2 
 from emp;
@@ -92,19 +95,18 @@ from emp;
 
 ### Decode함수와 Case문
 - If else문을 함수화시킨것이라 생각할 수 있음.
-
-- 만약 if구문이 아래와 같다면.
-```python
-if dept_name == "Shipping":
-	return "배송"
-elif dept_name == "Sales":
-	return "영업"
-......
-elif dept_name == null:
-	return "부서없음"
-else:
-	return dept_name
-```	
+	- 만약 if구문이 아래와 같다면.
+	```python
+	if dept_name == "Shipping":
+		return "배송"
+	elif dept_name == "Sales":
+		return "영업"
+	......
+	elif dept_name == null:
+		return "부서없음"
+	else:
+		return dept_name
+	```	
 - decode(컬럼, [비교값, 출력값, ...] , else출력) 
 ```SQL
 select decode(dept_name, 'Shipping', '배송', 
@@ -114,35 +116,25 @@ select decode(dept_name, 'Shipping', '배송',
                          dept_name) as dept, dept_name
 from emp;
 ```	
-case문 동등비교
+- case문 동등비교
+- case 컬럼 [when 비교값 then 출력값]
+-          [else 출력값] end         
+- case문 조건문
+- case [when 조건 then 출력값]
+-      [else 출력값] end
 ```SQL
-case 컬럼 when 비교값 then 출력값
-              [when 비교값 then 출력값]
-              [else 출력값]
-              end
-              
-case문 조건문
-case when 조건 then 출력값
-       [when 조건 then 출력값]
-       [else 출력값]
-       end
-ex)
 select case dept_name when 'Shipping' then '배송' 
                       when 'Sales' then '영업'
 					  .....
-                      else nvl(dept_name,'부서없음') end as dept,
-                      dept_name
-from emp
---Null일때는 '미배정' 그외에는 원래 이름을 넣어줄때.
-select case when dept_name is null then '미배정'
+					  else dept_name end as dept, dept_name					  
+
+select case when dept_name is null then '미배정' --Null일때는 '미배정'그 외는 원래이름.
             else dept_name end as dept, dept_name
-from emp
-order by dept_name desc;
+```
 
-
-'ST_CLERK', 'IT_PROG', 'PU_CLERK', 'SA_MAN' 먼저나오고 나머지업무 정렬시. 
-select *
-from emp
+- decode와 case를 이용해 원하는 조건을 먼저 정렬할때
+- 원하는 조건 = 'ST_CLERK', 'IT_PROG', 'PU_CLERK', 'SA_MAN' 이후 나머지업무 정렬. 
+```SQL
 -- 먼저 나오길 원하는 column명을 지정후 출력.
 decode문을 이용시:
 order by decode(job, 'ST_CLERK', '1', 
@@ -156,3 +148,61 @@ order by case job when 'ST_CLERK' then '1'
                   when 'SA_MAN' then'4'
                   else job end;				   
 ```
+### 집계함수, 그룹함수, 다중행함수
+- 집계함수
+	- sum(): 전체합계
+	- avg(): 평균
+	- min(): 최소값
+	- max(): 최대값
+	- stddev(): 표준편차
+	- variance(): 분산
+	- count(): 개수
+	- sum, avg, stddev, variance: number 타입에만 사용가능.
+	- min, max, count :  모든 타입에 다 사용가능.
+	- count(*)함수를 제외한 모든 집계함수는 null은 빼고 계산한다.
+
+- Group by
+	- 특정 컬럼(들)의 값별로 나눠 집계할 때 나누는 기준컬럼을 지정하는 구문.
+	- 구문: group by 컬럼명 [, 컬럼명]
+	- select의 where 절 다음에 기술한다.
+	- select 절에는 **group by 에서 선언한 컬럼들만** 집계함수와 같이 올 수 있다
+```SQL
+select dept_name, job, count(job) as 직원수
+from emp
+where dept_name in ('Sales', 'Purchasing')
+group by dept_name,job;
+```
+	- case함수를 사용한후 case문으로 출력 할 경우 select절에 같은 함수를 넣어야한다. 
+```SQL
+select case when salary >= 10000 then '10000 이상'
+            else '10000 미만' end as sal, count(*)
+from emp
+group by case when salary >= 10000 then '10000 이상' 
+              else '10000 미만' end;
+```
+- Having
+	- 집계결과에 대한 행 제약 조건.
+	- group by 다음 order by 전에 온다.
+	- 구문: having 제약조건 
+	- 집계함수를 이용한 제약조건.  
+	```SQL
+	-- 10명이상인 부서와 부서인원 조회.
+	SELECT DEPT_NAME, COUNT(*)
+	FROM EMP
+	GROUP BY dept_name
+	HAVING COUNT(*)>=10;
+	
+	-- 평균급여5천이상, 총급여5만이상인 부서와 평균,총급여를 조회.
+	SELECT DEPT_NAME, ROUND(AVG(SALARY),2), SUM(SALARY)
+	FROM EMP
+	GROUP BY DEPT_NAME
+	HAVING AVG(SALARY)>=5000 AND SUM(SALARY)>=50000;
+	```
+	
+
+
+
+
+
+
+
