@@ -1,13 +1,25 @@
 ### SQL 연산 우선순위 (Operator precedence and order of evaluation)
-```
-1: ( )  Parenthetic expression
-2: - Unary negative, not, Boolean test
-3: *, /, **
-4: +, -
-5: <, <=, >,>=, =, <>
-6: AND, OR
-```
 ```SQL
+우선순위 높은 순으로, 같은 라인에있는 연산자는 같은 우선순위를 갖는다.
+1. INTERVAL
+2. BINARY, COLLATE
+3. !
+4. - (unary minus), ~ (unary bit inversion)
+5. ^
+6. *, /, %
+7. -, +
+8. <<, >>
+9. &
+10. |
+11. = (comparison), <=>, >=, >, <=, <, <>, !=, IS, LIKE, REGEXP, IN
+12. BETWEEN, CASE, WHEN, THEN, ELSE
+13. NOT
+14. AND, &&
+15. XOR
+16. OR, ||
+17. = (assignment), :=
+
+AND 와 OR :
 and with or 절에서는 and 를 먼저 연산
 ex) a or b and c
 or를 먼저 연산하려면. ()사용
@@ -35,10 +47,10 @@ where job like '%MAN%' AND (dept_name = 'Marketing' or dept_name = 'Sales');
 - 문자열: 숫자 < 대문자 < 소문자 < 한글
 - date : 과거 < 미래	
 
-NULL 값
-ASC : 마지막.  order by 컬럼명 asc nulls first
-DESC : 처음.   order by 컬럼명 desc nulls last
--- nulls first, nulls last ==> 오라클 문법.
+- NULL 값
+	- ASC : order by 컬럼명 asc nulls first; null값을 앞에 놓고 싶을때.
+	- DESC : order by 컬럼명 desc nulls last; null값을 뒤에 놓고 싶을때.
+	- nulls first, nulls last ==> 오라클 문법.
 ```SQL
 Examples:
 select  emp_id, emp_name, job, salary
@@ -54,6 +66,11 @@ from    emp
 order by "업무", 급여 desc; --컬럼의 별칭을 사용할 수 있다.
 --order by 3, 4 desc;
 --order by job, salary desc;
+
+select dept_name
+from emp
+order by dept_name asc nulls first; --null을 앞으로.
+--order by dept_name desc nulls last; --null을 뒤로.
 ```
 
 
