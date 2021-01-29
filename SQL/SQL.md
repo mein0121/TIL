@@ -1,10 +1,12 @@
 ### SQL 연산 우선순위 (Operator precedence and order of evaluation)
+```
 1: ( )  Parenthetic expression
 2: - Unary negative, not, Boolean test
 3: *, /, **
 4: +, -
 5: <, <=, >,>=, =, <>
 6: AND, OR
+```
 ```SQL
 and with or 절에서는 and 를 먼저 연산
 ex) a or b and c
