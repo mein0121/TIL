@@ -245,7 +245,7 @@ GROUP BY ROLLUP(JOB); -- ROLLUP은 JOB기준으로 급여평균에 대한 총평
     - 전달한 컬럼이 집계에 사용되었는지 여부 2진수(0: 참여 안함, 1: 참여함)로 반환 한뒤 10진수로 변환해서 반환한다.
     - 컬럼이 2개 이상인경우, 
 	- ex) GROUPING_ID(DEPT_NAME, TO_CHAR(HIRE_DATE,'YYYY') 
-		- DEPT_NAME의 참여여부 : 2^1, HIRE_DATE 참여여부: 2^0  	# 컬럼이 n개면 2^n으로 표현한다.
+		- DEPT_NAME의 참여여부 : 2^1, HIRE_DATE 참여여부: 2^0  	# 컬럼이 n개면 2^n-1로 표현한다.
 		- DEPT_NAME, HIRE_DATE 모두 참여안함 : 2^1 \* 0 + 2^0 \* 0 = 0
 		- HIRE_DATE 만 참여 : 2^1 \* 0 + 2^0 \* 1 = 1
         - DEPT_NAME, HIRE_DATE 모두 참여 : 2^1 \* 1 + 2^0 \* 1 = 3
