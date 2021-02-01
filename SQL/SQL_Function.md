@@ -1,5 +1,15 @@
 # SQL Function(SQL 함수)
 
+### Query문 구조
+```SQL
+SELECT 컬럼 선택
+FROM 테이블
+WHERE 행조건
+GROUP BY 그룹 기준 컬럼
+HAVING 그룹 선택조건
+ORDER BY 정렬;
+```
+
 ### 단일행 함수
 - 그룹,집계 함수.
 - 행단위로 처리.
@@ -95,7 +105,7 @@ from emp;
 
 ### Decode함수와 Case문
 - If else문을 함수화시킨것이라 생각할 수 있음.
-	- 만약 if구문이 아래와 같다면.
+	-ex) 만약 if구문이 아래와 같다면.
 	```python
 	if dept_name == "Shipping":
 		return "배송"
@@ -107,7 +117,7 @@ from emp;
 	else:
 		return dept_name
 	```	
-- decode(컬럼, [비교값, 출력값, ...] , else출력) 
+- decode(컬럼, [비교값, 출력값, ...] , else출력)
 ```SQL
 select decode(dept_name, 'Shipping', '배송', 
                          'Sales', '영업', 
@@ -116,6 +126,22 @@ select decode(dept_name, 'Shipping', '배송',
                          dept_name) as dept, dept_name
 from emp;
 ```	
+- Decode 반환하는 형식은 첫번째 조건을 따라간다.
+```SQL
+DECODE(DEPT_NAME,'IT', '인상안함', -- 모든 반환타입 문자열
+				'Shipping', salary*1.2,
+				'Finance' , salary*1.3,
+				0)
+DECODE(DEPT_NAME,'IT', 'salary*1.1', -- 모든 반환타입 숫자
+				'Shipping', salary*1.2,
+				'Finance' , salary*1.3,
+				0)
+				
+--DECODE반환값으로 문자열과 다른타입을 사용할경우 문자열을 먼저 기술.
+Decode(grouping_id(mgr_id),1,'총계', 
+                           0,mgr_id),'상사없음')
+```
+
 - case문 동등비교
 - case 컬럼 [when 비교값 then 출력값]
 -          [else 출력값] end         
@@ -133,7 +159,7 @@ select case when dept_name is null then '미배정' --Null일때는 '미배정'�
 ```
 
 - decode와 case를 이용해 원하는 조건을 먼저 정렬할때
-- 원하는 조건 = 'ST_CLERK', 'IT_PROG', 'PU_CLERK', 'SA_MAN' 이후 나머지업무 정렬. 
+- ex) 원하는 조건 = 'ST_CLERK', 'IT_PROG', 'PU_CLERK', 'SA_MAN' 이후 나머지업무 정렬. 
 ```SQL
 -- 먼저 나오길 원하는 column명을 지정후 출력.
 decode문을 이용시:
@@ -148,6 +174,7 @@ order by case job when 'ST_CLERK' then '1'
                   when 'SA_MAN' then'4'
                   else job end;				   
 ```
+
 ### 집계함수, 그룹함수, 다중행함수
 - 집계함수
 	- sum(): 전체합계
@@ -159,7 +186,7 @@ order by case job when 'ST_CLERK' then '1'
 	- count(): 개수
 	- sum, avg, stddev, variance: number 타입에만 사용가능.
 	- min, max, count :  모든 타입에 다 사용가능.
-	- count(*)함수를 제외한 모든 집계함수는 null은 빼고 계산한다.
+	- count(\*)함수를 제외한 모든 집계함수는 null은 빼고 계산한다.
 
 - Group by
 	- 특정 컬럼(들)의 값별로 나눠 집계할 때 나누는 기준컬럼을 지정하는 구문.
@@ -190,7 +217,8 @@ group by case when salary >= 10000 then '10000 이상'
 	SELECT DEPT_NAME, COUNT(*)
 	FROM EMP
 	GROUP BY dept_name
-	HAVING COUNT(*)>=10;
+	HAVING COUNT(*)>=10
+	ORDER BY 2;
 	
 	-- 평균급여5천이상, 총급여5만이상인 부서와 평균,총급여를 조회.
 	SELECT DEPT_NAME, ROUND(AVG(SALARY),2), SUM(SALARY)
@@ -199,10 +227,38 @@ group by case when salary >= 10000 then '10000 이상'
 	HAVING AVG(SALARY)>=5000 AND SUM(SALARY)>=50000;
 	```
 	
+- rollup : group by의 확장. # 중간집계나 총집계를 만들때 사용.
+  - 두개 이상의 컬럼을 group by로 묶은 경우 누적집계(중간집계나 총집계)를 부분 집계에 추가해서 조회한다.
+  - 구문 : group by rollup(컬럼명 [,컬럼명,..])
+```SQL
+SELECT JOB, ROUND(AVG(SALARY),2) AS "평균"
+FROM EMP
+GROUP BY ROLLUP(JOB); -- ROLLUP은 JOB기준으로 급여평균에 대한 총평균계.
+```
 
-
-
-
+- grouping(), grouping_id()
+  - rollup 이용한 집계시 컬럼이 각 행의 집계에 참여했는지 여부를 반환하는 함수.
+  - case/decode를 이용해 레이블을 붙여 가독성을 높일 수 있다.
+	
+- grouping_id()
+	- 구문: grouping_id(groupby 컬럼, ..)
+    - 전달한 컬럼이 집계에 사용되었는지 여부 2진수(0: 참여 안함, 1: 참여함)로 반환 한뒤 10진수로 변환해서 반환한다.
+    - 컬럼이 2개 이상인경우, 
+	- ex) GROUPING_ID(DEPT_NAME, TO_CHAR(HIRE_DATE,'YYYY') 
+		- DEPT_NAME의 참여여부 : 2^1, HIRE_DATE 참여여부: 2^0  # 컬럼이 n이면 2^n으로 표현한다.
+		- DEPT_NAME, HIRE_DATE 모두 참여안함 : 2^1 \* 0 + 2^0 \* 0 = 0
+		- HIRE_DATE 만 참여 : 2^1 \* 0 + 2^0 \* 1 = 1
+        - DEPT_NAME, HIRE_DATE 모두 참여 : 2^1 \* 1 + 2^0 \* 1 = 3
+```SQL
+SELECT DECODE(GROUPING_ID(DEPT_NAME, TO_CHAR(HIRE_DATE,'YYYY')),
+		0, NVL(DEPT_NAME, '미배치')||'-'||TO_CHAR(HIRE_DATE,'YYYY'), -- 모두 참여 안할때.
+        1, NVL(DEPT_NAME, '미배치')||' 중간집계', -- HIRE_DATE만 참여할때
+        3, '총계'), -- 모두 참여 할때.
+        ROUND(AVG(SALARY),2)
+FROM EMP
+GROUP BY ROLLUP(DEPT_NAME, TO_CHAR(HIRE_DATE,'YYYY'))
+ORDER BY DEPT_NAME;
+```
 
 
 
