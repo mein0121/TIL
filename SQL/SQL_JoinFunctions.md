@@ -48,15 +48,44 @@
 	- 각 테이블을 어떻게 합칠지를 표현하는 것을 조인 연산이라고 한다.
     - 조인 연산에 따른 조인종류 : Equi join , non-equi join
 	- From 절에서 Join 관계을 지정 할 수 있다.
-	
-– ***Inner Join, Outer Join, Cross Join
+- Inner Join, Outer Join, Cross Join
     - Inner Join 
         - 양쪽 테이블에서 조인 조건을 만족하는 행들만 합친다. 
+	- ANSI Inner Join 구문
+	```SQL
+	FROM  테이블a INNER JOIN 테이블b ON 조인조건 -- INNER 생략가능.
+	 
+	-- EMP 테이블과 DEPT 테이블 두개의 테이블을 조인.
+	EX)
+	SELECT e.emp_id, e.salary, d.dept_name, d.loc 
+	FROM emp e join dept d on e.dept_id = d.dept_id -- 두 테이블을 조인후 on절에 조인 조건 선언.
+	WHERE e.salary between 10000 and 29999; -- Salary가 1만이상 3만미만인 직원만조회.
+	
+	-- EMP 테이블, DEPT 테이블, JOB 테이블 세개의 테이블을 조인. 세개의 테이블 조인시 테이블간의 관계성에 맞춰서 선언해야한다.
+	-- DEPT와 JOB간의 관계성이 없고 EMP만 JOB과 DEPT테이블과 관계성이 있을때.
+	EX)
+	SELECT e.emp_id, e.salary, j.job_title, d.dept_name
+	FROM emp e join dept d on e.dept_id = d.dept_id -- EMP와 DEPT테이블 조인과 on절에 조건 선언후
+			   join job j on e.job_id = j.job_id    -- 세번째 테이블의 조인과 on절에 조건 선언.
+	WHERE e.emp_id = 200;
+	```
+		- Self Join
+			- 물리적으로 하나의 테이블을 두개의 테이블처럼 조인하는 것.
+		```SQL
+		Table의 alias를 다르게 지정
+		--직원의 ID(emp.emp_id), 이름(emp.emp_name), 상사이름(emp.emp_name)을 조회
+		select e.emp_id, e.emp_name,
+			   b.emp_name -- 상사이름
+		from emp e, emp b -- 테이블의 별칭을 e, b로 
+		where e.mgr_id = b.emp_id -- table e의 mgr_id와 table b의 emp_id를 비교
+		order by e.mgr_id;
+		```
     - Outer Join
         - 한쪽 테이블의 행들을 모두 사용하고 다른 쪽 테이블은 조인 조건을 만족하는 행만 합친다. 조인조건을 만족하는 행이 없는 경우 NULL을 합친다.
         - 종류 : Left Outer Join,  Right Outer Join, Full Outer Join
     - Cross Join
         - 두 테이블의 곱집합을 반환한다.
+
 
 
 
