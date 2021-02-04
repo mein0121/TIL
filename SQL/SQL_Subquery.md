@@ -35,7 +35,14 @@
 		- 실행 순서: mainquery실행 -> mainquery 실행결과를 바탕으로 subquery 조건절을 비교.
 		- 연산자
 			- EXISTS, NOT EXISTS
-		
-		
-		
+		```SQL
+		ex) 직원유무에 따른 부서명을 구하라.
+		select d.dept_id, d.dept_name
+		from dept d
+		-- 직원이 한명이라도 있는 부서를 구할때.
+		where not exists (select * from emp e where e.dept_id = d.dept_id);
+		-- 직원이 한명도 없는 부서를 구할때.
+		where not exists (select * from emp e where e.dept_id = d.dept_id);
+		```		
+				
 		
