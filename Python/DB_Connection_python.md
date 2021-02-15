@@ -19,7 +19,7 @@ conn = cx_Oracle.connect(username, password, url) #연결시도.
 conn.close() # 연결 닫기.
 ```
 ```Python
-try-except-fianlly절을 이용한 연결.
+# try-except-fianlly절을 이용한 연결.
 conn, cursor = None, None
 try:
 	conn = cx_Oracle.connect("username/password@host:portNumber/SID")
@@ -36,7 +36,7 @@ finally:
 		conn.close()
 ```
 ```python
-with절을 이용한 연결, close 생략 가능.
+# with절을 이용한 연결, close 생략 가능.
 with cx_Oracle.connect("username/password@host:portNumber/SID") as conn:
 	with conn.cursor() as cursor:
 		# SQL실행문
