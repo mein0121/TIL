@@ -1,4 +1,4 @@
-## Python
+## Python Database Connection
 ### 실행 순서
 - import cx_Oracle
 - cx_Oracle모듈의 connect() 함수를 이용해 database 연결.
@@ -8,8 +8,8 @@
 - Cursor, Connection 연결 닫기.
 
 ### DB 연결
-connect() 함수를 이용하며 연결 후 Connection 객체를 받는다.
-연결시 필요한 값: user name, password, host, port번호, SID(DB이름)
+- connect() 함수를 이용하며 연결 후 Connection 객체를 받는다.
+- 연결시 필요한 값: user name, password, host, port번호, SID(DB이름)
 ```python
 import cx_Oracle
 username = 'username'
@@ -50,8 +50,8 @@ with cx_Oracle.connect("username/password@host:portNumber/SID") as conn:
 - close(): 연결 닫기.
 
 ### Cursor
-	- SQL문을 전송하고 select결과를 조회하는 메소드들을 제공한다.
-	- Connection객체의 cursor() 메소드로 받아온다.
+- SQL문을 전송하고 select결과를 조회하는 메소드들을 제공한다.
+- Connection객체의 cursor() 메소드로 받아온다.
 - Cursor 메소드
 	- execute(sql) : 하나의 sql 문 실행.
 	- executemany(sql): insert, update, delete 배치 처리.
@@ -72,7 +72,7 @@ cursor.execute(select_sql, [15000,20000]) -- placeholder 순서대로 값 지정
 ex) dictionary
 sql = "INSERT INTO emp VALUES(:id, :name, :job_id, :mgr_id)"
 dict1 = {
-    'id':100001,
+	'id':100001,
     'name':'HONG',
     'job_id': 'ACCOUNT',
     'mgr_id': 10
