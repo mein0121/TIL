@@ -28,8 +28,8 @@ try:
 	cursor.execute(sql)
 	conn.commit()
 except Exception as e:
-	pass
-fianlly:
+	print(e)
+finally:
 	if cursor != None:
 		cursor.close()
 	if conn != None:
@@ -38,10 +38,10 @@ fianlly:
 ```python
 with절을 이용한 연결, close 생략 가능.
 with cx_Oracle.connect("username/password@host:portNumber/SID") as conn:
-    with conn.cursor() as cursor:
-	# SQL실행문
-	cursor.execute(sql)
-	conn.commit()
+	with conn.cursor() as cursor:
+		# SQL실행문
+		cursor.execute(sql)
+		conn.commit()
 ```
 
 ### Connection 주요 메소드
@@ -73,9 +73,9 @@ ex) dictionary
 sql = "INSERT INTO emp VALUES(:id, :name, :job_id, :mgr_id)"
 dict1 = {
 	'id':100001,
-    'name':'HONG',
-    'job_id': 'ACCOUNT',
-    'mgr_id': 10
+	'name':'HONG',
+	'job_id': 'ACCOUNT',
+	'mgr_id': 10
 	}
 cursor.execute(sql, dict1)
 ```
