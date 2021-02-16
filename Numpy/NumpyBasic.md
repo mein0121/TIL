@@ -56,7 +56,7 @@ rank = 3, shape = (2,2,3), size = 12
 - ndarray.astype(데이터타입): 데이터타입 변환
 ```python
 a2 = a1.astype(np.int) 
-# a5배열의 타입을 int(int32)로 변환. 변환한 값을을 가진 새로운 배열을 반환.
+# a1배열의 타입을 int(int32)로 변환. 변환한 값을을 가진 새로운 배열을 반환.
 ```
 #### rank,shape,size반환 메소드.
 - 배열.ndim = rank를 반환.
@@ -91,7 +91,7 @@ np.ones_like(배열)
 	- retstep : 생성된 배열 샘플과 함께 간격(step)도 리턴할지 여부. True일경우 간격도 리턴(sample, step) => 튜플로 받는다.
 ```
 np.linspace(1,10,5,false,True)
->(array([1. , 2.8, 4.6, 6.4, 8.2]), 1.8)
+return > (array([1. , 2.8, 4.6, 6.4, 8.2]), 1.8)
 ```
 - identity(N)
 	- 대각에만 값(1) 나머지는 0으로 채운 행렬.
