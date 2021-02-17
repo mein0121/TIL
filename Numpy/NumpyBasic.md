@@ -62,7 +62,13 @@ a2 = a1.astype(np.int)
 - 배열.ndim = rank를 반환.
 - 배열.Shape = 튜플로 shape를 반환.
 - 배열.size = 총원소수를 반환.
-
+- 배열.reshape(배열형태) = 배열형태를 변환후 반환.
+```python
+ex) a = [0 1 2 3 4 5 6 7 8 9]
+a.reshape(2,5)
+>> array([[0, 1, 2, 3, 4],
+		 [5, 6, 7, 8, 9]])
+```
 ### 배열 생성 메소드
 - zeros(shape, dtype): 영벡터(행렬) 생성
 - ones(shape, dtype): 일벡터 생성
@@ -104,5 +110,27 @@ return > (array([1. , 2.8, 4.6, 6.4, 8.2]), 1.8)
 - np.random.seed(정수) : 시드값 설정
 - np.random.rand(axis0[, axis1, axis2, ...])
 - np.random.normal(loc=0.0, scale=1.0, size=None)
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+v = np.random.normal(10, 5, size=5000)
+plt.figure(figsize=(7,7))
+plt.hist(v, bins=30)
+plt.show()
+```
 - np.random.randint(low, high=None, size=None, dtype='l')
 - np.random.choice(a, size=None, replace=True, p=None)
+	- 샘플링 메소드
+	- a : 샘플링대상. 1차원 배열 또는 정수 (정수일 경우 0 ~ 정수, 정수 불포함)
+	- size : 샘플 개수
+	- replace : True-복원추출(기본), False-비복원추출
+	- p: 샘플링할 대상 값들이 추출될 확률 지정한 배열
+
+### 배열의 값 섞기.
+- np.random.shuffle(배열) : 원본을 섞는다.
+- np.random.permutation(배열) : 원본을 섞은 카피배열을 반환.
+- 다차원 배열의 경우는 0번 축을 기준으로 섞는다.
+```python
+a = np.arange(12).reshape(2,2,3)
+b = np.random.permutation(a) # a의 배열을 섞는다.
+```
