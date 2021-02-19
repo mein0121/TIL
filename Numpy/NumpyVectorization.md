@@ -5,12 +5,12 @@
     - 배열의 형태가 다른 경우 Broadcast 조건을 만족하면 연산이 가능하다.
 
 $$
-\begin{align}
+begin{align}
 x=
-\begin{bmatrix}
-1 \\
-2 \\
-3 \\
-\end{bmatrix}
-\end{align}
+begin{bmatrix}
+1 \
+2 \
+3 \
+end{bmatrix}
+end{align}
 $$
