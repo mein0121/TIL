@@ -34,3 +34,35 @@
 - 매개변수로 한개의 배열을 받는다.
 - 한 배열내의 원소별로 연산  
 ![image](/images/unary.png)
+
+## 단항 범용함수(unary ufunc)
+- 매개변수로 한개의 배열을 받는다.
+- 한 배열내의 원소별로 연산  
+![image](/images/polynomial.png)
+
+## reduce()
+- 결과가 하나만 남을 때 까지 해당 연산을 배열의 모든 요소에 반복해서 적용
+- 구문
+	- np.**이항범용함수이름**.reduce(배열, axis=0)
+- 처리결과의 축의개수(rank)는 하나 줄어 든다.
+```python
+y = np.arange(1, 25).reshape(3, 4, 2)
+print(y.shape)
+>>> (3, 4, 2)
+r = np.add.reduce(y, axis=0) # 행방향으로 연산
+print(r.shape)
+>>> (4, 2)
+r1 = np.add.reduce(y, axis=1) # 열방향으로 연산.
+print(r1.shape)
+>>> (3, 2)
+```
+
+	
+## 누적연산함수 - accumulate()
+- 배열의 원소들에 해당연산을 누적해 적용
+- 처리경과의 축의개수(rank)는 피연산자배열과 동일하다.
+- 구문
+	- np.**이항범용함수이름**.accumulate(배열, axis=0)	
+	
+
+	
