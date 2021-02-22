@@ -87,3 +87,16 @@ print(r1.shape)
 - 분위수
     - np.quantile()
     - 4분위수
+	- interpolation(보간): 짝수개일 경우 어떤 값을 반환
+		- 앞의값: i, 뒤의값: j
+		- lower: 작은값(앞의값) : i
+		- higher: 큰값(뒤의 값) : j
+		- midpoint: 평균 : (i+j)/2
+		- linear: rlqhs : i + (j-i)*분위수
+```
+ex)
+np.quantile(a, q=0.25, interpolation='lower')
+np.quantile(a, q=0.25, interpolation='higher')
+np.quantile(a, q=0.25, interpolation='midpoint')
+np.quantile(a, q=0.25, interpolation='linear')
+```
