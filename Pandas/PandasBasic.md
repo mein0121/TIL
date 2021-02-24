@@ -49,6 +49,15 @@ s3 = pd.Series([70, 100, 90, 80], index=['국어', '영어', '수학', '과학']
 - **index 순번으로 조회**
     - Series[순번]
     - Series.iloc[순번]
+	- 음수 index로 조회시
+		- index명 지정시: indexer([음수])로 조회가능
+		```
+		Series[음수]
+		```
+		- index명 미지정시: iloc indexer를 사용.
+		```
+		Series.iloc[음수]
+		```
 - **index 이름으로 조회**
     - Series[index명]
     - Series.loc[index명]
@@ -107,8 +116,90 @@ s3 = pd.Series([70, 100, 90, 80], index=['국어', '영어', '수학', '과학']
 	Series[Series>100]
 	Series[~(Series>100)] # '~' not 조건절
 	```
+### 주요 메소드
+- head(정수), tail(정수): 원하는 원소를 정수 갯수만큼 head와 tail에서 조회.
+- value_counts(): Series반환, index명: 고윳값, value:개수
+	- normalize=True 지정시 비율 반환.
+	- value_counts(dropna=False): NaN을 포함한 고유값의 개수.
+```
+Series.value_count()
+Series.value_count(normalize=True)
+Series.value_counts(dropna=False)
+```
+- index : index명 조회, **원본의 index명 변경**, 개별적인 변경은 안됨.
+```
+#원본 Series의 index변경
+Series.index =['indexName1','indexName2'...]
+```
+- rename: index명 변경. 복사본을 반환. inplace=True시 원본을 변경
+```
+Series.rename({'orginalIndexName':'IndexName'}) # 변경한 복사본을 반환
+Series.rename({'orginalIndexName':'IndexName'}, inplace=True) # 원본을 변경. default값은 False
+```
+- count() 결측치 제외한 원소 개수 조회
+```
+결측치 삽입. 판다스의 결측치 넘파이의 nan
+Series[index] = np.nan 
+```
+- sort_values(): 값으로 정렬. ascending=False 내림차순, True 오름차순
+- sort_index(): index로 정렬. ascending=False 내림차순, True 오름차순
+- unique(), nunique(): 고유값과, 고유값의 수를 조회. Nan값을 제외. 
+- isin([values]): 각원소가 value값중 하나와 같으면 True, 다르면 False 반환.
 
+### 통계량
+- 데이터셋의 데이터들의 특징을 하나의 숫자로 요약한 것.
+- ### 평균 
+    - 전체 데이터셋의 데이터들은 평균값 근처에 분포되어 데이터셋의 대표값으로 사용한다.
+    - 이상치(너무 크거나 작은 값)의 영향을 많이 받는다.
 
+- ### 중앙값
+    - 분포된 값들을 작은값 부터 순서대로 나열한 뒤 그 중앙에 위치한 값
+    - 이상치에 영향을 받지 않아 평균대신 집단의 대표값으로 사용한다.
+- ### 표준편차/분산
+    - 값들이 흩어져있는 상태(분포)를 추정하는 통계량으로 분포된 값들이 평균에서 부터 얼마나 떨어져 있는지를 나타내는 통계량.
+    - 각 데이터가 평균으로 부터 얼마나 차이가 있는지를 편차(Deviation)라고 한다. ($평균-데이터$)
+    - 분산 : 편차 제곱의 합을 총 개수로 나눈 값 
+    
+    - 표준편차
+        - 분산의 제곱근
+        - 분산은 원래 값에 제곱을 했으므로 다시 원래 단위로 계산한 값.
+   
+- ### 최빈값(mode)
+    - 데이터 셋에서 가장 많이 있는 값.
+- ###  분위수(Quantile)
+    - 데이터의 크기 순서에 따른 위치값
+        - 데이터셋을 크기순으로 정렬한뒤 N등분했을 때 특정 위치에서의 값 (단면)
+        - N등분한 특정위치의 값들 통해 전체 데이터셋을 분포를 파악한다.
+        - 대표적인 분위수 : 4분위, 10분위, 100분위
+    - 데이터의 분포를 파악할 때 사용
+    - 이상치 중 극단값들을 찾을 때 사용 (4분위수)
 
-
-
+- 극단값(이상치): [실수]범위가 클수록 정상범위 증가 작을수록 정상범위 감소. 기본1.5
+	- 극단적으로 작은값 < Q1 - IQR*[실수]
+	- 극단적으로 큰값 > Q3 + IQR*[1.5]
+	
+## 결측치 (Missing Value, Not Available, N/A)
+- 판다스에서 결측치
+    - None, numpy.nan, numpy.NAN
+    
+### 결측치 확인
+- Numpy
+    - np.isnan(배열)
+    ```python
+	import numpy as np
+	a = np.array([1,np.nan])
+	np.isnan(a)
+	```
+- Series
+    - Series객체.isnull()
+    - Series.notnull()
+- DataFrame
+    - DataFrame객체.isnull(), DataFrame객체.isna()
+    - DataFrame객체.notnull(), DataFrame객체.notna()
+	
+### 결측치 처리
+- 제거 
+    - dropna()
+- 다른값으로 대체 
+    - fillna() 
+	
