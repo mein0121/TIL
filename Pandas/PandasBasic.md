@@ -147,6 +147,12 @@ Series[index] = np.nan
 - isin([values]): 각원소가 value값중 하나와 같으면 True, 다르면 False 반환.
 
 ### 통계량
+- 판다스의 기술통계함수는 NA값을 무시(제거)하고 계산하는 것이 default.
+	- skipna=False를 이용해서 NA값까지 계산 가능.
+	```
+	Series.sum(skipna=False)
+	Series.mean(skipna=False)
+	```
 - 데이터셋의 데이터들의 특징을 하나의 숫자로 요약한 것.
 - ### 평균 
     - 전체 데이터셋의 데이터들은 평균값 근처에 분포되어 데이터셋의 대표값으로 사용한다.
