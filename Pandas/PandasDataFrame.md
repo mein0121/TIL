@@ -116,3 +116,41 @@
         - 부분일치 개념
     - regex = “ ”
         - 정규 표현식을 이용해 열명의 패턴으로 조회
+
+## 행 조회
+- **loc** :  index 이름으로 조회
+	- `DF.loc[start index이름 : end index이름: step]`
+		- end index 이름의 행까지 포함한다.
+	- `DF.loc[index이름 , 컬럼이름]`
+		- 행과 열 조회
+- **iloc** : 행 순번으로 조회
+	- `DF.iloc[start 행번호: stop 행번호: step]`
+		- stop 행번호 포함 안함.
+	- `DF.loc[행번호 , 열번호]`  
+		- 행과 열 조회
+		- 행열 모두 순번으로 지정
+		
+## Boolean indexing을 이용한 조회
+- 행, 열에 조건식을 이용해 원하는 조건의 행이나 열을 조회
+- 다중 조건의 경우 ( )로 묶는다.
+- 논리연산자
+	- & : and 연산자
+	- | : or 연산자
+	- ~ : not 연산자
+
+- DataFrame객체[조건], DataFrame객체.loc[조건]
+    - 조건이 True인 행만 조회
+    - 열까지 선택시
+        - DataFrame객체[조건][열]
+        - DataFrame객체.loc[조건, 열]
+- **iloc[]**은 boolean indexing을 **지원하지 않는다.**
+```
+ex)
+# duration이 300 이상인 duration, movie_title과 director_name 조회
+movie_df[movie_df['duration']>=300][['movie_title','director_name','duration']]
+# James Cameron의 영화중 상영시간이 150분 이상인 영화들의 movie_title, durations, color 조회
+movie_df[(movie_df['director_name']=='James Cameron') & (movie_df['duration']>=150)][['movie_title','duration','color','director_name']]
+# loc사용 : DataFrame객체.loc[조건, 열]
+movie_df.loc[(movie_df['director_name']=='James Cameron') & (movie_df['duration']>=150),['movie_title','duration','color','director_name']]
+```
+		
