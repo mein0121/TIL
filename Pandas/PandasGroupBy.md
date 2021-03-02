@@ -65,4 +65,96 @@ flights.mean()
 #결측치를 제외하지 않을때
 flights.mean(skipna=False)
 ```
+### aggregate(func, axis=0, \*args, \*\*kwargs) 또는 agg(func, axis=0, \*args, \*\*kwargs)
+- 판다스가 제공하는 집계 함수들이나 사용자 정의 집계함수를 DataFrame의 열 별로 처리해주는 함수.
+- **사용자 정의 집계함수를 사용하거나 열 별로 다른 집계를 할 때 사용한다.**
+- 매개변수
+    - func 
+        - 집계 함수 지정
+            - 문자열/문자열리스트 : 집계함수의 이름. 여러 개일 경우 리스트. 판다스 제공 집계함수는 문자열로 함수명만 제공가능
+   			```
+			DataFrame.aggregate('sum')
+			DataFrame.aggregate(['sum','mean','median'])
+			DataFrame.agg(['sum','mean','median']).T
+			```
+			- 딕션어리 : {집계할컬럼 : 집계함수 }
+			```
+			# airline: 최빈값-mode, DEP_DELAY:평균-mean
+			flights.agg({'AIRLINE':'mode','DEP_DELAY':'mean'})
+			# airline: 최빈값-mode, DEP_DELAY:평균-mean and 표준편차-std
+			# 보고싶은 값이 두개이상일때 리스트로 묶는다. ex)['mean','std']
+			flights.agg({'AIRLINE':'mode','DEP_DELAY':['mean','std']})
+			# ARR_DELAY,DEP_DELAY 의 min, max
+			flights[['ARR_DELAY','DEP_DELAY']].agg(['min','max'])
+			```
+			- 함수 객체 : 사용자 정의 함수의 경우 함수이름을 전달
 
+    - axis
+        - 0 또는 'index' (기본값): 컬럼 별 집계
+        - 1 또는 'columns': 행 별 집계
+    - \*args, \**kwargs 
+        - 함수에 전달할 매개변수. 
+        - 집계함수는 첫번째 매개변수로 Series를 받는다. 그 이외의 매개변수가 있는 경우. 
+
+# Groupby
+- 특정 열을 기준으로 데이터셋을 묶는다.
+- 구문
+    - DF.groupby('그룹으로묶을기준컬럼')['집계할 컬럼'].집계함수()
+        - 집계할 컬럼은 Fancy Indexing 으로 지정(리스트, 튜플로 전달)
+    - 집계함수
+        - 기술통계 함수들
+        - agg()/aggregate()
+            - 여러 다른 집계함수 호출시(여러 집계를 같이 볼경우)
+            - 사용자정의 집계함수 호출시
+            - 컬럼별로 다른 집계함수들을 호출할 경우
+```
+# AIRLINE별 각 컬럼의 평균
+flights.groupby('AIRLINE').mean()
+#AIRLINE별 AIR_TIME의 평균
+flights.groupby('AIRLINE')['AIR_TIME'].mean()
+#AIRLINE별 여러종류의 평균
+flights.groupby('AIRLINE')[['ARR_DELAY','DEP_DELAY','...'....]].mean()
+# 두종류이상의 통계함수를 사용할때는 agg함수를 이용.
+flights.groupby('AIRLINE')['ARR_DELAY'].agg(['mean','std'])
+#컬럼별 다른 통계량을 조회, agg함수에 dictionary를 사용.
+flights.groupby('AIRLINE').agg({"DEP_DELAY":['mean','std'],
+                               "ARR_DELAY":['min','max'],
+                               "AIR_TIME":'count'})
+#index 기준으로 groupby
+df.groupby(df.index).집계함수							
+```
+###  복수열 기준 그룹핑
+- 두개 이상의 열을 그룹으로 묶을 수 있다. 
+- groupby의 매개변수에 그룹으로 묶을 컬럼들의 이름을 리스트로 전달한다.
+```
+df.groupby(['columnName1','ColumName2'])['조건column'].집계함수
+#AIRLINE, MONTH기준
+flights.groupby(['AIRLINE','MONTH'])['DEP_DELAY'].mean()
+# 다수의 조건과, 다수의 집계함수를 조회하려할때.
+flights.groupby(['AIRLINE','MONTH'])[['DEP_DELAY','ARR_DELAY']].agg(['mean','sum'])
+```
+
+## Goupby 집계후 집계한 것 중 특정 조건의 항목만 보기
+- SQL having 절
+- 집계 후 boolean indexing으로 having절 처리
+
+
+## 사용자 정의 집계함수를 만들어 적용
+
+### 사용자 정의 집계 함수 정의
+- 매개변수
+    1. Series 또는 DataFrame을 받을 매개변수(필수)
+    2. 필요한 값을 받을 매개변수를 선언한다. (선택)
+
+### agg() 를 사용해 사용자 정의 집계 함수 호출
+- DataFrame.agg(func=None, axis=0, \*args, \*\*kwargs)
+    - axis : 사용자 정의 함수에 전달할 값들(Series)의 축 지정
+- Series.agg(func=None, axis=0, \*args, \*\*kwargs)
+    - DataFrame의 agg와 매개변수 구조를 맞추기 위해 axis 지정한다. 
+- SeriesGroupBy.agg(func=None,  \*args, \*\*kwargs)  
+    - axis 지정안함
+    - 사용자 함수에 Series를 group 별로 전달한다.
+- DataFrameGroupBy.agg(func, \*args, \*\*kwargs)  
+    - axis 지정안함.
+    - 사용자 함수에 Series를 group 별로 전달한다. 
+- \*args, \*\*kwargs는 사용자 정의 함수에 선언한 매개변수가 있을 경우 전달할 값을 전달한다.  
