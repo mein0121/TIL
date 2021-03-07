@@ -66,9 +66,8 @@ tidy data란 용어는 해들리 위컴이 분석이 용이한 형태로 구성�
 
 # [melt()](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.melt.html) - 컬럼명을 컬럼의 값으로 변환한다.
 
-- stack()과 같이 컬럼 명을 단일 컬럼의 값으로 변환한다.
+- stack()과 같이 컬럼 명을 단 일 컬럼의 값으로 변환한다.
 - 변환할 컬럼들을 지정할 수 있어 stack()보다 더 유연하다.
-
 
 ## 매개변수
 - id_vars: 값으로 변환하지 않고 그대로 유지하고자 하는 컬럼명(열이름)들의 리스트
@@ -86,16 +85,25 @@ tidy data란 용어는 해들리 위컴이 분석이 용이한 형태로 구성�
 > - melt 한 경우 **index명은 무시된다.** => RangeIndex로 대체된다.
 >    - index를 유지하려면 **reset_index**를 이용해 value로 뺀 뒤 해야 한다.
 > - stack은 열이름을 index명으로 정돈(변경) 한다.
-        
+```
+ex)
+# value_vars를 생략하면 id_vars의 컬럼을 제외한 모든 컬럼들을 컬럼의 값으로 만든다.
+# id_vars, value_vars를 모두 생략하면 모든 컬럼들을 컬럼의 값으로 만든다.
+df.melt(id_vars=['유지할컬럼명'], value_vars=['컬럼값1','컬럼값2','컬럼값3']...)
+df.melt(id_vars=['유지할컬럼명'], value_vars=['컬럼값1','컬럼값2','컬럼값3'], 
+		var_name='value_vars로 단일열된 열 이름지정', 
+		value_name='value_vars에 지정된 값의 이름 지정')
+```
+ 
 # pivot - index, column, value가 될 컬럼들을 지정해 재구조화
 - 데이터프레임 재구조화가 목적인데 melt된 것을 원상복구 시킬때도 사용할 수 있다.
-		
+		 
 ## pivot 매개변수
 - **각 매개변수의 값은 단일 문자열로 컬럼명을 준다.**
 - index: 문자열(리스트안됨). 행이름으로 사용할 컬럼 -> 열이 index로 이동하는 형태가 된다.
 - columns: 문자열(리스트안됨). 컬럼명으로 사용할 컬럼
     - **index와 columns 는 여러개 지정 안됨. 오직 하나만 지정 가능**
-- values : Value에 올 컬럼명
+- values : Value에 올 컬럼명 
 
 	
 	
