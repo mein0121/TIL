@@ -38,8 +38,8 @@
 
 2. 그래프를 그린다.
     - 2가지 방식
-        - pyplot 모듈을 이용해 그린다.
-        - Figure와 Axes 객체를 생성해서 그린다.
+    - pyplot 모듈을 이용해 그린다.
+    - Figure와 Axes 객체를 생성해서 그린다.
 
 3. 그래프에 필요한 설정을 한다.
 
@@ -76,4 +76,90 @@ plt.xlabel("X축값")
 plt.ylabel("Y축값")
 
 plt.show()
+```
+- 하나의 subplot(axes)에 여러개의 그래프를 그리기.
+```python
+ex)
+import matplotlib.pyplot as plt
+
+# figure의 크기
+plt.figure(figsize=(7,7)) # 가로,세로(길이) - inch
+
+# 그래프 그리기.
+plt.plot([1,2,3,4,5,6],[10,20,30,40,50,60], label='line A') #선그래프
+plt.scatter([10,20,30,40,50,60],[1,2,3,4,5,6], label='scatter A') # 산점도
+plt.plot([10,20,30,40,50,60],[10,20,30,40,50,60],label='line B') # 선그래프
+
+#범례(legend) 생성, label='' 에 지정한것을 표기
+plt.legend() 
+plt.show()
+
+```
+
+## 3.2. Figure 와 Axes 객체를 이용해 그리기
+
+- Figure에 axes를 추가한 뒤 axes에 그래프를 그린다.
+- axes 생성 방법
+    - figure.add_subplot() 메소드 이용
+        - figure를 먼저 생성후 axes 들을 추가
+    - pyplot.subplots() 함수를 이용
+        - figure와 axes배열을 동시에 생성
+		
+###  3.2.1 figure.add_subplot() 메소드 이용
+- figure객체에 axes를 추가하는 형태
+- nrows(총행수), ncols(총열수), index(axes위치) 지정
+
+# 4. 색상과 스타일
+## 4.1 색 지정
+- color 또는 c 속성을 이용해 지정
+- 색상이름으로 지정. 
+    - 색이름 또는 약자로 지정 가능
+    - 'red', 'r'
+    
+| 문자열 | 약자 |
+|-|-|
+| `blue` | `b` |
+| `green` | `g` |
+| `red` | `r` |
+| `cyan` | `c` |
+| `magenta` | `m` |
+| `yellow` | `y` |
+| `black` | `k` |
+| `white` | `w` |
+
+
+- HTML 컬러문자열
+    - #으로 시작하며 RGB의 성분을 16진수로 표현
+    - #RRGGBB 또는 #RRGGBBAA
+    - #FF0000, #00FF00FA
+- 0 ~ 1 사이 실수로 흰식과 검정색 사이의 회색조를 표시
+    - 0: 검정, 1: 흰색
+- https://matplotlib.org/examples/color/named_colors.html
+- https://htmlcolorcodes.com/
+    - picker, chart(코드), name(색이름) 제공사이트
+```python
+ex)
+plt.figure(figsize=(7,7), facecolor='blue')
+plt.plot([1,2,3],[10,20,30],color='r')# 색이름 약자
+plt.plot([1,2,3],[10,20,30],color='#C878F4')# HTML color코드
+plt.plot([1,2,3],[10,20,30],color='#FF0000FF') #RRGGBBAA: AA-투명도 (0에 가까울수록 투명한것)
+plt.plot([1,2,3],[10,20,30],color='0.88') # 0(검정) ~ 1(흰색) 실수 - 회색조.
+plt.show()
+
+```
+## 4.2 Style
+- Style: 그래프의 여러 시각효과들을 미리 설정해 놓은 것
+- matplotlib는 다양한 스타일들을 미리 정의해 놓고 있다.
+    - [스타일목록](https://matplotlib.org/gallery/style_sheets/style_sheets_reference.html)
+    - `plt.style.use()` 함수 이용해 지정
+    - 스타일 초기화
+        ```python
+		import matplotlib as mpl
+		mpl.rcParams.update(mpl.rcParamsDefault)
+		```
+```
+ex)
+plt.style.use('dark_background')
+plt.style.use('ggplot')
+plt.style.use('seaborn')
 ```
