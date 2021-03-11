@@ -158,11 +158,18 @@ axes[0].set_xlabel('list1')
 axes[0].set_ylabel('list2')
 axes[0].grid(True)
 
+
+for idx, x in enumerate(list2): # 그래프에 수치 표시하기.
+    axes[0].text(idx,x,x)
+
 axes[1].barh(list1,list2, height=0.1)# bar그래프의 width와 같음.
 axes[1].set_title('수평막대그래프')
-axes[1].set_xlabel('list1')
-axes[1].set_ylabel('list2')
+axes[1].set_xlabel('list2')
+axes[1].set_ylabel('list1')
 axes[1].grid(True)
+
+for x, y in zip(list2,list1): # 수평막대그래프 수치표시하기.
+    axes[1].text(x,y,x)
 ```
 	
 # 4. 파이차트 그리기
@@ -179,6 +186,33 @@ plt.pie(amount,labels=labels, autopct="%.2f%%", # autopct: 비율표현
        explode=[0,0.2,0,0,0.2], shadow=True) # explode:특정 값을 강조할때, 숫자만큼 빼준다.
                                              # shadow: 차트 꾸미기, 입체적으로 보이게한다.
 plt.show()
+```	
+
+# 5 히스토그램 그리기
+## .1 히스토그램
+- 표로 된 도수 분포표를 그래프로 나타낸 것.
+    - 도수분포표: 특정 그룹안에 값의 빈도를 나타낸 표
+    - 주로 연속형 자료를 특정 구간으로 나눠 그 빈도를 확인한다.
+        - 빈도 확인이나 **분포**를 볼때 사용한다.
+    - X축: 계급(변수구간)의 대표값, Y축: 빈도수
+- `hist(data [, bins=계급개수)` 메소드를 사용
+    - data: 리스트형의 객체를 전달한다.
+`plt.hist(data, bins=100) #bins= : 그래프를 몇개로 세분화할것인지.`
+
+# 6. 상자그래프(Boxplot) 그리기
+## 6.1 상자그래프란
+- 값들의 중간값, 사분위수, 정상범위내에서 최대/최소값을 보여주어 값들의 분포를 확인 할때 사용한다.
+- boxplot(x, whis=1.5)
+    - x: 데이터셋
+    - whis: 극단치 계산시 사용할 값(기본 1.5)
+        - 극단치 : 1사분위와 3사분위에서 $IQR(3사분위수-1사분위수) * whis$ 범위 이상 떨어진 값들	
+```
+ex)
+plt.boxplot(data)
+# plt.boxplot(data, whis=5) #whis 를 1.5(기본)초과 주면 정상범위를 늘리는 것.
+# plt.boxplot(data, whis=0.3) #whis 를 1.5(기본)미만 주면 정상범위를 좁히는 것.
+# plt.boxplot(data, vert=False) #vert 수직방향(기본-True), 수평방향(False)
 ```		
-		
-	
+
+
+
