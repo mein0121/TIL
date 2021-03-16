@@ -57,5 +57,16 @@ df['df'].dt.day, df['day'].dt.hour, df['day'].dt.minute, df['day'].dt.second
 - 문자앞에 정수: 간격
 	`pd.date_range('2000/1/1', freq='5Y', periods=5)`
 
-
- 
+###  Categorical Data 타입
+> - 범주형 타입
+> - 문자열과 차이점
+>     - 내부적으로 정수로 관리되기 때문에 메모리를 절약 할 수 있다. 
+>     - 사전적 순서와 논리적 순서가 다를 경우 논리적 순서로 정렬되도록 정의 할 수 있다.
+>         - 사전적순서: Four One Three Two
+>         - 논리적순서: One Two Three Four
+> - str 타입 Series를 Categorical 타입으로 변환
+>     - `pandas.categorical(변환할Series, [categories=[고유값 리스트], ordered=None])`
+	`pd.Categorical(df['요일'], categories=['월','화','수','목','금','토','일'], ordered=True)`
+	- categories: 고유값 리스트를 지정한다. 생략할 경우 Series의 고유값들을 가지고 만든다.
+        - 원하는 순서대로 지정하기 위해서는 설정한다.
+    - ordered: 순서형 여부 설정
