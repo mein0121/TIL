@@ -55,8 +55,131 @@
 
 
 
+### Machine Learning 개발 절차
+- Business Understanding
+	- 머신러닝 개발을 통해 얻고자 하는 것 파악.
+- Data Understanding
+	- 데이터 수집
+	- 탐색을 통해 데이터 파악
+- Data Preparation  
+	- 데이터 전처리
+- Modeling
+	- 머신러닝 모델 선정
+	- 모델 학습
+- Evaluation
+	- 모델 평가
+	- 평가 결과에 따라 위 프로세스 반복
+- Deployment
+    - 평가 결과가 좋으면 실제 업무에 적용
 
 
-	
-	
-	
+# [사이킷런(scikit-learn)](https://scikit-learn.org/stable)
+파이썬 머신러닝 라이브러리가 가장 많이 사용된다. 딥러닝을 제외한 대부분의 머신러닝 알고리즘을 제공한다.
+
+## 사이킷런의 특징
+1. 파이썬 기반 다른 머신러닝 라이브러리가 사이킷런 스타일의 API를 지향할 정도로 쉽고 가장 파이썬스런 API 제공
+2. 머신러닝 관련 다양한 알고리즘을 제공하며 모든 알고리즘에 일관성있는 사용법을 제공한다.
+
+## scikit-learn(사이킷런) 설치
+- `conda install scikit-learn`
+- `pip install scikit-learn`
+
+## Estimator와 Transformer
+### Estimator (추정기)
+- 데이터를 학습하고 예측하는 알고리즘(모델)들을 구현한 클래스들
+- fit() 
+    - 데이터를 학습하는 메소드
+- predict()
+	- 예측을 하는 메소드
+### Transformer (변환기)
+- 데이터 전처리를 하는 클래스들. 데이터 셋의 값의 형태를 변환한다.
+- fit()
+    - 어떻게 변환할지 학습하는 메소드
+- transform()
+    - 변환처리 하는 메소드
+- fit_transform()
+    - fit()과 transform()을 같이 처리하는 메소드	
+
+
+## 데이터셋 확인하기
+
+### 용어
+- **레이블(Label), 타겟(Target)**
+    - 결정값, 출력데이터, 종속변수
+    - 예측 대상이 되는 값. 지도학습시 학습을 위해 주어지는 정답 데이터
+    - 분류의 경우 레이블을 구성하는 고유값들을 **클래스(class)**라고 한다.
+- **피쳐(Feature)**
+    - 속성, 입력데이터, 독립변수
+    - Target이 왜 그런 값을 가지게 되었는지를 설명하는 변수. 
+    - Target값을 예측하기 위해 학습해야 하는 값들. 
+
+### scikit-learn 내장 데이터셋 가져오기
+- scikit-learn은 머신러닝 모델을 테스트 하기위한 데이터셋을 제공한다.
+    - 이런 데이터셋을 Toy dataset이라고 한다.
+- 패키지 : sklearn.datasets
+- 함수   : load_xxxx()
+```
+from sklearn.datasets import load_iris
+iris = load_iris()
+# 위 데이터셋을 판다스 데이터 프레임으로 구성하는
+iris_df = pd.DataFrame(iris['data'], columns = iris['feature_names'])
+```
+### scikit-learn 내장 데이터셋의 구성
+- scikit-learn의 dataset은 딕셔너리 형태의 Bunch 클래스 객체이다.
+    - keys() 함수로 key값들을 조회
+- 구성
+    - **target_names**: 예측하려는 값(class)을 가진 문자열 배열
+    - **target**: Label(출력데이터)
+    - **data**: Feature(입력변수)
+    - **feature_names**: 입력변수 각 항목의 이름
+    - **DESCR**: 데이터셋에 대한 설명
+```python
+example) iris dataset
+# 1. import
+from sklearn.tree import DecisionTreeClassifier
+# 2. 모델생성
+tree = DecisionTreeClassifier()
+# 3. 모델을 학습
+tree.fit(iris['data'], iris['target']) # input_data(feature), output_data(label)
+# 4. 예측
+# sepal(꽃받침)의 길이(length)와 폭(width), petal(꽃잎)의 길이와 폭, 예측할 값을 전달.
+my_iris = [
+    [5,3.5,1.4,0.25],
+    [6,7,1.5,2.3],
+    [2,3,5,7]
+]
+pred = tree.predict(my_iris)
+iris['target_names'][pred]
+```
+
+## 훈련데이터셋과 평가(테스트)데이터 분할
+- 전체 데이터 셋을 두개의 데이터셋으로 나눠 하나는 모델을 훈련할 때 사용하고 다른 하나는 그 모델을 평가할 때 사용한다.
+- 보통 훈련데이터와 테스트데이터의 비율은 8:2 또는 7:3 정도로 나누는데 데이터셋이 충분하다면 6:4까지도 나눈다.
+### 데이터셋 분할시 주의
+- 각 클래스(분류대상)가 같은 비율로 나뉘어야 한다. 
+## scikit-learn의  train_test_split() 함수 이용 iris 데이터셋 분할
+```
+# Dataset을 Train dataset과 test dataset으로 분할해주는 함수.
+from sklearn.model_selection import train_test_split
+# input, output
+X_train, X_test, Y_train, Y_test = train_test_split(iris['data'],   #input dataset
+                                   iris['target'], #ouput dataset
+                                   test_size=0.2,  # test set의 비율(0 ~ 1), default: 0.25
+                                   stratify=iris['target'], # 각 클래스(분류대상)들을 원본데이터셋과 같은 비율로 나눠라.
+                                   random__state=1) # random의 seed값 정의
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
