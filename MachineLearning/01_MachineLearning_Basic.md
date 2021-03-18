@@ -169,8 +169,26 @@ X_train, X_test, Y_train, Y_test = train_test_split(iris['data'],   #input datas
                                    random__state=1) # random의 seed값 정의
 ```
 
-
-
+## 평가
+- 머신러닝 평가지표 함수들은 sklearn.metrics 모듈에 있다.
+- accuracy(정확도)
+    - 전체 데이터셋중 맞춘 개수의 비율
+```
+from sklearn.metrics import accuracy_score #정확도 검증하는 함수
+acc_train_score = accuracy_score(Y_train, pred_train)
+acc_test_score = accuracy_score(Y_test, pred_test)
+print("Train Set 정확도:", acc_train_score)
+print("Test Set 정확도:", acc_test_score)
+```
+- 혼동행렬 (Confusion Matrix)
+    - 예측 한 것이 실제 무엇이었는지를 표로 구성한 평가 지표
+    - 분류의 평가 지표로 사용된다.
+    - axis=0: 실제, axis=1: 예측
+```
+from sklearn.metrics import confusion_matrix
+cm_train = confusion_matrix(Y_train, pred_train)
+cm_test = confusion_matrix(Y_test, pred_test)
+```
 
 
 
