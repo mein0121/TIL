@@ -52,9 +52,6 @@
     - 학습하는 시스템이 행동을 실행하고 그 결과에 따른 보상이나 벌점을 받는 방식으로 학습.  
 	학습이 계속되면서 가장 큰 보상을 얻기 위한 최상의 전략을 스스로 학습하게 한다.	
 
-
-
-
 ### Machine Learning 개발 절차
 - Business Understanding
 	- 머신러닝 개발을 통해 얻고자 하는 것 파악.
@@ -71,7 +68,6 @@
 	- 평가 결과에 따라 위 프로세스 반복
 - Deployment
     - 평가 결과가 좋으면 실제 업무에 적용
-
 
 # [사이킷런(scikit-learn)](https://scikit-learn.org/stable)
 파이썬 머신러닝 라이브러리가 가장 많이 사용된다. 딥러닝을 제외한 대부분의 머신러닝 알고리즘을 제공한다.
@@ -99,7 +95,6 @@
     - 변환처리 하는 메소드
 - fit_transform()
     - fit()과 transform()을 같이 처리하는 메소드	
-
 
 ## 데이터셋 확인하기
 
@@ -133,6 +128,8 @@ iris_df = pd.DataFrame(iris['data'], columns = iris['feature_names'])
     - **data**: Feature(입력변수)
     - **feature_names**: 입력변수 각 항목의 이름
     - **DESCR**: 데이터셋에 대한 설명
+
+### 결정트리 모델을 이용해 머신러닝 구현
 ```python
 example) iris dataset
 # 1. import
@@ -151,53 +148,3 @@ my_iris = [
 pred = tree.predict(my_iris)
 iris['target_names'][pred]
 ```
-
-## 훈련데이터셋과 평가(테스트)데이터 분할
-- 전체 데이터 셋을 두개의 데이터셋으로 나눠 하나는 모델을 훈련할 때 사용하고 다른 하나는 그 모델을 평가할 때 사용한다.
-- 보통 훈련데이터와 테스트데이터의 비율은 8:2 또는 7:3 정도로 나누는데 데이터셋이 충분하다면 6:4까지도 나눈다.
-### 데이터셋 분할시 주의
-- 각 클래스(분류대상)가 같은 비율로 나뉘어야 한다. 
-## scikit-learn의  train_test_split() 함수 이용 iris 데이터셋 분할
-```
-# Dataset을 Train dataset과 test dataset으로 분할해주는 함수.
-from sklearn.model_selection import train_test_split
-# input, output
-X_train, X_test, Y_train, Y_test = train_test_split(iris['data'],   #input dataset
-                                   iris['target'], #ouput dataset
-                                   test_size=0.2,  # test set의 비율(0 ~ 1), default: 0.25
-                                   stratify=iris['target'], # 각 클래스(분류대상)들을 원본데이터셋과 같은 비율로 나눠라.
-                                   random__state=1) # random의 seed값 정의
-```
-
-## 평가
-- 머신러닝 평가지표 함수들은 sklearn.metrics 모듈에 있다.
-- accuracy(정확도)
-    - 전체 데이터셋중 맞춘 개수의 비율
-```
-from sklearn.metrics import accuracy_score #정확도 검증하는 함수
-acc_train_score = accuracy_score(Y_train, pred_train)
-acc_test_score = accuracy_score(Y_test, pred_test)
-print("Train Set 정확도:", acc_train_score)
-print("Test Set 정확도:", acc_test_score)
-```
-- 혼동행렬 (Confusion Matrix)
-    - 예측 한 것이 실제 무엇이었는지를 표로 구성한 평가 지표
-    - 분류의 평가 지표로 사용된다.
-    - axis=0: 실제, axis=1: 예측
-```
-from sklearn.metrics import confusion_matrix
-cm_train = confusion_matrix(Y_train, pred_train)
-cm_test = confusion_matrix(Y_test, pred_test)
-```
-
-
-
-
-
-
-
-
-
-
-
-
