@@ -97,9 +97,89 @@ print('최종 검증결과(test): ', acc_test)
     - 데이터가 충분히 많을때는 변동성이 흡수되 괜찮으나 수천건 정도로 적을 때는 문제가 발생할 수 있다.
 - 데이테셋의 양이 적을 경우 학습을 위한 데이터 양이 너무 적어 학습이 제대로 안될 수 있다.    
 
+## K-겹 교차검증 (K-Fold Cross Validation)
+- 데이터셋을 K 개로 나눈 뒤 하나를 검증세트로 나머지를 훈련세트로 하여 모델을 학습시키고 평가한다. 나뉜 K개의 데이터셋이 한번씩 검증세트가 되도록 K번 반복하여 모델을 학습시킨 뒤 나온 평가지표들을 평균내서 모델의 성능을 평가한다.
+- 종류
+### K-Fold
+```
+from sklearn.datasets import load_iris
+from sklearn.model_selection import KFold
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
 
+iris = load_iris()
+X, y = iris['data'], iris['target']
+# 객체를 생성하면서 몇개의 fold로 나눌지 (K값)을 지정. 
+kfold = KFold(n_splits=5) #K=3
+acc_train_list = [] #trainset으로 평가한 정확도를 저장할 리스트
+acc_test_list = [] #testset으로 평가한 정확도를 저장할 리스트
+# kfold.split(나누려는 InputData): Generator반환. train/test set의 index를 반환
+for train_index, test_index  in kfold.split(X):
+	# 데이터셋 분리
+	X_train, y_train = X[train_index], y[train_index]
+	X_test, y_test = X[test_index], y[test_index]
+	# 모델생성	/ 학습
+	tree = DecisionTreeClassifier(max_depth=2)
+	tree.fit(X_train, y_train)
+	# 검증
+	pred_train = tree.predict(X_train)
+	pred_test = tree.predict(X_test)
+	acc_train = accuracy_score(y_train, pred_train)
+	acc_test = accuracy_score(y_test, pred_test)
+	#평가결과 리스트에 추가
+	acc_train_list.append(acc_train)
+	acc_test_list.append(acc_test)
+```
+- K-Fold의 문제점
+	- 원 데이터셋의 row 순서대로 분할하기 때문에 불균형 문제가 발생할 수 있다.	
 
+### Stratified K-Fold
+- 나뉜 fold 들에 label들이 같은(또는 거의 같은) 비율로 구성 되도록 나눈다. 
+```
+from sklearn.model_selection import StratifiedKFold
+#객체 생성시 몇개의 fold로 나눌지 지정 (K값)
+s_fold = StratifiedKFold(n_splits=3)
+acc_train_list = []
+acc_test_list = []
 
+#label별 동일한 분포로 분할해야 하므로 label데이터셋(y)도 같이 준다. 반환값: generator
+for train_index, test_index in s_fold.split(X, y):
+    # train, test set data 분리/생성
+    X_train, y_train = X[train_index], y[train_index]
+    X_test, y_test = X[test_index], y[test_index]
+    
+    # 모델 생성/학습
+    tree = DecisionTreeClassifier(max_depth=2)
+    tree.fit(X_train, y_train)
+    
+    # 검증
+    pred_train = tree.predict(X_train)
+    pred_test = tree.predict(X_test)
+    
+    acc_train_list.append(accuracy_score(y_train, pred_train))
+    acc_test_list.append(accuracy_score(y_test, pred_test))
+```
 
-
+### cross_val_score( )
+- 데이터셋을 K개로 나누고 K번 반복하면서 평가하는 작업을 처리해 주는 함수
+- 주요매개변수
+    - estimator: 학습할 평가모델객체
+    - X: feature
+    - y: label
+    - scoring: 평가지표
+    - cv: 나눌 개수 (K)
+- 반환값: array - 각 반복마다의 평가점수  
+```
+from sklearn.model_selection import cross_val_score
+#Dataset loading
+iris = load_iris()
+X, y = iris['data'], iris['target']
+# 모델 생성
+tree = DecisionTreeClassifier(max_depth=2)
+scores = cross_val_score(estimator=tree, # 모델 지정.
+                         X=X, # feature
+                         y=y, # label
+                         scoring='accuracy',
+                         cv=3)
+```
 
