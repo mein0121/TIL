@@ -40,4 +40,58 @@ label_encoder2 = LabelEncoder()
 labels2 = label_encoder2.fit_transform(items) 
 ```
 
+## 원핫 인코딩(One-Hot encoding)
+- N개의 클래스를 N 차원의 One-Hot 벡터로 표현되도록 변환
+    - 고유값들을 피처로 만들고 정답에 해당하는 열은 1로 나머진 0으로 표시한다..
+- 숫자의 차이가 모델에 영향을 미치는 선형 계열 모델(로지스틱회귀, SVM, 신경망)에서 범주형 데이터 변환시 라벨 인코딩 보다 원핫 인코딩을 사용한다.
+
+- **사이킷런**
+    - sklearn.preprocessing.OneHotEncoder 이용
+        - fit(): 어떻게 변환할 지 학습
+        - transform(): 문자열를 숫자로 변환
+        - fit_transform(): 학습과 변환을 한번에 처리
+        - get_feature_names() : 원핫인코딩으로 변환된 컬럼의 이름을 반환
+    - DataFrame을 넣을 경우 모든 변수들을 변환한다. 
+        - 범주형 컬럼만 처리하도록 해야 한다.
+```
+from sklearn.preprocessing import OneHotEncoder
+#False: 결과를 ndarray로 반환. True: 결과를 sparse matrix 반환. Default값: True
+ohe = OneHotEncoder(sparse=False)
+ohe.fit(items.reshape(-1,1))  # 2차원 배열
+item_ohe = ohe.transform(items.reshape(-1,1)) #반환: csr_matrix:희소행렬
+```
+- **Pandas**
+    - pandas.get_dummies(DataFrame [, columns=[변환할 컬럼명]]) 함수 이용
+    - DataFrame에서 범주형(문자열) 변수만 변환한다.
+    
+> 범주형 변수의 값을 숫자 값을 가지는 경우가 있다. (ex: 별점)    
+> 이런 경우 get_dummies() columns=['컬럼명','컬럼명'] 매개변수로 컬럼들을 명시한다.
+```
+pd.get_dummies(df) # 문자열 컬럼만 원핫인코딩 처리.
+pd.get_dummies(df, columns=['column_1', 'column_2']) # columns에 인코딩 대상 컬럼들을 지정한다. => 숫자형도 인코딩된다.
+```
+
+# 연속형(수치형) 데이터 전처리
+## Feature Scaling(정규화)
+- 각 feature(컬럼)가 가지는 값들의 숫자 범위(Scale)가 다를 경우 이 값의 범위를 일정한 범위로 맞추는 작업
+- 트리계열을 제외한 대부분의 머신러닝 알고리즘들이 피처의 스케일에 영향을 받는다.
+    - 선형모델, SVM 모델, 신경망 모델 등
+- **Scaling(정규화)은 train set으로 fitting 한다. test set이나 예측할 새로운 데이터는 train set으로 fitting한 것으로 변환한다.**
+
+## 함수
+- fit(): 어떻게 변환할 지 학습
+- transform(): 변환
+- fit_transform(): 학습과 변환을 한번에 처리 
+
+###  표준화(StandardScaler)
+- 피쳐의 값들이 평균이 0이고 표준편차가 1인 범위(표준정규분포)에 있도록 변환한다.
+	- 0을 기준으로 모든 데이터들이 모여있게 된다
+- sklearn.preprocessing.StandardScaler 를 이용
+
+### MinMaxScaler
+- 데이터셋의 모든 값을 0과 1 사이의 값으로 변환한다.
+
+
+
+
 
