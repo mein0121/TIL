@@ -144,3 +144,48 @@ randomized_search.best_estimator_
 - pipeline.fit_transform()
     - fit()과 동일하나 마지막 단계에서도 fit_transform()이 실행된다.
     - 보통 전처리 작업 파이프라인(모든 단계가 변환기)일 때  사용
+## GridSearch에서 Pipeline 사용
+- 하이퍼파라미터 지정시 파이프라인 `프로세스이름__하이퍼파라미터` 형식으로 지정한다.
+```
+from sklearn.pipeline import Pipeline
+order = [
+    ("scaler", StandardScaler()), # 1번째 작업
+    ("svc", SVC()) # 2번째 작업
+    #("svc", SVC(C=0.1, gamma=0.5)) # 하이퍼 파라미터.
+
+]
+pipeline =Pipeline(order, verbose=True) # verbose=True: 학습시 로그를 출력
+
+# 학습
+pipeline.fit(X_train, y_train)
+# 예측
+pred_train = pipeline.predict(X_train)
+pred_test = pipeline.predict(X_test)
+# 검증
+accuracy_score(y_train, pred_train), accuracy_score(y_test, pred_test)
+
+# GridSearch사용시 `프로세스이름__하이퍼파라미터` 형식으로 지정
+#SVC : C, gamma
+param_grid = {
+    "svc__C":[0.001, 0.01, 0, 1, 10, 100], # C 하이퍼 파라미터.
+    "svc__gamma":[0.001, 0.01, 0, 1, 10, 100] # gamma 하이퍼 파라미터.
+}
+grid_search = GridSearchCV(pipeline,  #모델에 pipeline 객체 지정
+                           param_grid=param_grid,
+                           scoring='accuracy', 
+                           cv=3, 
+                           n_jobs=-1)
+# 학습
+grid_search.fit(X_train, y_train)
+# 예축
+pred_train = grid_search.predict(X_train)
+pred_test = grid_search.predict(X_test)
+# 검증
+accuracy_score(y_train, pred_train), accuracy_score(y_test, pred_test)
+```
+
+
+
+
+
+
