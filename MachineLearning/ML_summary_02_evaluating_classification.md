@@ -36,7 +36,7 @@
 - 혼동행렬을 이용해 다양한 평가지표(정확도, 재현률, 정밀도, F1 점수, AUC 점수)를 계산할 수 있다.
 - 함수: confusion_matrix(정답, 모델예측값)
 - 결과의 0번축: 실제(Ground Truth) class, 1번 축: 예측 class
-![image](/image/predicted.png)
+![image](/images/predicted.png)
 - TP(True Positive) - 양성으로 예측했는데 맞은 개수
 - TN(True Negative) - 음성으로 예측했는데 맞은 개수
 - FP(False Positive) - 양성으로 예측했는데 틀린 개수 (음성을 양성으로 예측)
@@ -87,13 +87,13 @@ predict = binarizer.transform(pos_proba)[:, 1]
 ```
 
 ## PR Curve(Precision Recall Curve-정밀도 재현율 곡선)와 AP Score(Average Precision Score)
-![image](/image/prcAndaps.png)
+![image](/images/prcAndaps.png)
 - 임계값이 0 → 1 변화할때 재현율(recall)과 정밀도(precision)의 변화를 이용한 평가 지표
 - AP Score
     - PR Curve의 선아래 면적을 계산한 값으로 높을 수록 성능이 우수하다.
 
 ## ROC curve(Receiver Operating Characteristic Curve)와 AUC(Area Under the Curve) score
-![image](/image/rocAndauc.png)
+![image](/images/rocAndauc.png)
 - **FPR(False Positive Rate-위양성율)**
     - 위양성율 (fall-out)
     - 실제 음성중 양성으로 잘못 예측 한 비율
