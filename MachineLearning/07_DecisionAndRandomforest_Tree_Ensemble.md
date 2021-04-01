@@ -109,7 +109,7 @@
 부스팅(Boosting)이란 단순하고 약한 학습기(Weak Learner)들를 결합해서 보다 정확하고 강력한 학습기(Strong Learner)를 만드는 방식.  
 정확도가 낮은 하나의 모델을 만들어 학습 시킨뒤, 그 모델의 예측 오류는 두 번째 모델이 보완한다. 이 두 모델을 합치면 처음보다는 정확한 모델이 만들어 진다. 합쳐진 모델의 예측 오류는 다음 모델에서 보완하여 계속 더하는 과정을 반복한다.
 
-- 약한 학습기들은 앞 학습기가 만든 오류를 줄이는 방향으로 학습한다.
+- **약한 학습기들은 앞 학습기가 만든 오류를 줄이는 방향으로 학습한다.**
 - gradient boosting
     - 처음 모델은 y를 예측 두번째 부터는 앞 모델이 만든 오류를 예측 그것을 앞 모델에 업데이트하면 오류를 줄일 수 있다.
     - 그 오류를 update할 때 뺄까 더할까를 gradient descent 방법을 쓴다. 미분해서 나오는 값의 음수를 취해서 적용. 
@@ -137,3 +137,15 @@
     - validation_fraction에 지정한 비율만큼 n_iter_no_change에 지정한 반복 횟수동안 검증점수가 좋아 지지 않으면 훈련을 조기 종료한다.
 
 - 보통 max_depth를 낮춰 개별 트리의 복잡도를 낮춘다. (5가 넘지 않게) 그리고 n_estimators를 가용시간, 메모리 한도에 맞춘뒤 적절한 learning_rate을 찾는다.
+
+## Scikit-learn 래퍼 XGBoost
+- XGBoost를 Scikit-learn프레임워크와 연동할 수 있도록 개발됨.
+- Scikit-learn의 Estimator들과 동일한 패턴으로 코드를 작성할 수 있다.
+- GridSearchCV나 Pipeline 등 Scikit-learn이 제공하는 다양한 유틸리티들을 사용할 수 있다.
+- XGBClassifier: 분류
+- XGBRegressor : 회귀 
+
+### 주요 매개변수
+- learning_rate : 학습률, 보통 0.01 ~ 0.2 사이의 값 사용
+- n_estimators : week tree 개수
+- max_depth: 트리의 depth 지정.
