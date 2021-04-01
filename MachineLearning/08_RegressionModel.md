@@ -53,5 +53,5 @@
     - 규제 (Regularization) 을 통해 Feature들에 곱해지는 가중치가 커지지 않도록 제한한다.
 
 ## Ridge Regression
-!(/images/ridgeregression.png)
+![image](/images/ridgeregression.png)
 
