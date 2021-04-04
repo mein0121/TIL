@@ -55,3 +55,17 @@
 ## Ridge Regression
 ![image](/images/ridgeregression.png)
 
+## Lasso(Least Absolut Shrinkage and Selection Operator) Regression
+![image](/images/lasso.png)
+
+## 엘라스틱넷
+- 릿지와 라쏘를 절충한 모델.
+- 규제항에 릿지, 라쏘 규제항을 더해서 추가한다. 
+- 혼합뷰율(r) 을 사용해 혼합정도를 조절
+- r=0이면 릿지와 같고 r=1이면 라쏘와 같다.
+
+## 정리
+- 일반적으로 선형회귀의 경우 어느정도 규제가 있는 경우가 성능이 좋다.
+- 기본적으로 릿지를 사용한다.
+- Target에 영향을 주는 Feature가 몇 개뿐일 경우 특성의 가중치를 0으로 만들어 주는 라쏘 사용한다. 
+- 특성 수가 학습 샘플 수 보다 많거나 feature간에 연관성이 높을 때는 엘라스틱넷을 사용한다.
